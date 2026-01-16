@@ -75,7 +75,7 @@ A precise and reliable dataset is the foundation for effective research. In this
 #### Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/FFTUNet-m7G.git
+git clone https://github.com/tingtingring/FFTUNet-m7G.git
 cd FFTUNet-m7G
 ```
 
