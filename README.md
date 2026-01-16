@@ -11,9 +11,6 @@ A novel interpretable deep learning model for accurate and stable prediction of 
 - [📊 Dataset Description](#-dataset-description)
 - [⚙️ Environment Installation](#️-environment-installation)
 - [🚀 Model Training and Usage](#-model-training-and-usage)
-- [📈 Experimental Results](#-experimental-results)
-- [📄 Citation](#-citation)
-
 ---
 
 ## ✨ Model Innovation Highlights
