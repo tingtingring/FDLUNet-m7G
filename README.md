@@ -1,178 +1,67 @@
-FTNet: Frequency-aware Transformer U-Net for RNA Modification Site Prediction
+## Overview
 
-This repository provides the implementation of FTNet, a deep learning framework for RNA modification site prediction.
-FTNet integrates frequency-domain decomposition, 1D U-Net, and Transformer-based contextual modeling to capture both local and global sequence patterns.
+In this study, we constructed a new dataset that provides a richer and more reliable basis for subsequent model training and evaluation. In addition, we developed a new interpretable deep learning model, named **FFTUNet-m7G**, to achieve accurate and stable prediction of m7G modification sites.
 
-🔬 Model Overview
+---
 
-FTNet is designed for binary classification of RNA modification sites (e.g. m7G, m1A, m5C, A-to-I).
+## Main Contributions
 
-Key components:
+The main contributions of this work are summarized as follows:
 
-One-hot encoding (1-mer) of RNA/DNA sequences
+1. We constructed a more comprehensive and multidimensional dataset of m7G modification sites and loss-of-modification variants. Compared with previous studies, this dataset alleviates the problem of limited sample size and improves applicability under diverse biological conditions.
 
-Initial CNN encoder for low-level feature extraction
+2. We propose FFTUNet-m7G, which integrates Fast Fourier Transform on motif-level features. Through frequency-domain decomposition, the model captures variation information at different scales, enabling effective multi-scale feature representation and fusion.
 
-Frequency-domain decomposition (FFT):
+3. A U-Net–based encoder–decoder architecture is introduced to extract hierarchical sequence features. This design helps suppress redundant information and noise, leading to more robust and stable prediction performance.
 
-Low-frequency branch
+4. To improve model interpretability and further investigate its prediction mechanism, structural-level and mutation-level analyses are conducted using AlphaFold-based structure modeling and in silico saturation mutagenesis (ISM), providing insights into both the model behavior and biological relevance.
 
-High-frequency branch
+In addition, systematic comparative and ablation experiments demonstrate that FFTUNet-m7G consistently outperforms existing methods, and that each component contributes meaningfully to accurate prediction. The model is further evaluated on multiple RNA modification prediction tasks, indicating strong generalization ability and broad applicability.
 
-Raw (time-domain) branch
+---
 
-Three parallel U-Net + Transformer branches
+## Environment Requirements
 
-Feature fusion with channel-wise attention
+The following environment is required to run FFTUNet-m7G:
 
-Center-position classification head
+- Python ≥ 3.8  
+- PyTorch ≥ 1.10  
+- CUDA-enabled GPU is recommended
 
-🧠 Architecture
-Input Sequence
-     │
-1-mer Encoding + One-hot
-     │
-Initial CNN
-     │
-FFT Decomposition
- ┌───────────┬───────────┬───────────┐
- │ Low-freq  │ High-freq │ Raw        │
- │  U-Net +  │ U-Net +   │ U-Net +    │
- │ Transformer│Transformer│Transformer│
- └───────────┴───────────┴───────────┘
-     │
-Feature Fusion (FC-based attention)
-     │
-Center Position Feature
-     │
-Binary Classification
+Required Python packages:
 
-📁 Project Structure
-.
-├── unet_cnn_ft.py        # FTNet model definition
-├── train.py              # Training and evaluation script
-├── data/                 # FASTA datasets
-│   └── m7G/
-│       ├── train_ref.fasta
-│       ├── val_ref.fasta
-│       └── test_ref.fasta
-├── save/                 # Saved model checkpoints
-├── results/              # Training logs
-└── README.md
+```bash
+pip install torch numpy pandas scikit-learn tqdm termcolor tensorboard
+Usage
+Training
+Model training and evaluation are performed using the following script:
 
-🧬 Input Data Format
+bash
+复制代码
+python train.py
+Before running, please ensure that:
 
-FASTA format is required.
+The correct GPU device is specified via CUDA_VISIBLE_DEVICES
 
-Example:
+Dataset paths in train.py are properly configured
+
+Hyperparameters (e.g., learning rate, batch size, sequence length) are set in the params dictionary
+
+Dataset Description
+The dataset is provided in FASTA format and contains both positive (m7G-modified) and negative (loss-of-modification) samples.
+
+Each sequence header encodes the label information, for example:
+
+makefile
+复制代码
 >chr19:34401574|1|train
 ATGCTAGCTAGCTAGCTAG...
->chr19:34401575|0|train
-CGATCGATCGATCGATCGA...
+1 indicates a positive m7G modification site
 
+0 indicates a negative sample
 
-Label is parsed from FASTA header:
+RNA sequences are automatically converted from U to T during preprocessing
 
-1 → positive sample
+All sequences are centered and padded to a fixed length (default: 201 nt)
 
-0 → negative sample
-
-RNA bases (U) will be automatically converted to T
-
-⚙️ Environment Requirements
-
-Python ≥ 3.8
-
-PyTorch ≥ 1.10
-
-CUDA-enabled GPU (recommended)
-
-Required packages
-pip install torch numpy pandas scikit-learn tqdm termcolor tensorboard
-
-🚀 Training
-Step 1: Set GPU
-export CUDA_VISIBLE_DEVICES=0
-
-
-(or modify it directly in the code)
-
-Step 2: Configure Hyperparameters
-
-In train.py:
-
-params = {
-    'lr': 1e-4,
-    'batch_size': 64,
-    'epoch': 100,
-    'seq_len': 201,
-    'seed': 17,
-    'patience': 10,
-    'index': 10
-}
-
-Step 3: Run Training
-python train.py
-
-📊 Evaluation Metrics
-
-The following metrics are reported:
-
-Accuracy (ACC)
-
-Balanced Accuracy (BACC)
-
-Sensitivity (SE)
-
-Specificity (SP)
-
-Matthews Correlation Coefficient (MCC)
-
-Area Under ROC Curve (AUC)
-
-Early stopping is applied based on validation accuracy.
-
-💾 Model Checkpoints
-
-Best models are saved automatically:
-
-save/seq_len201/seed17_YYYYMMDD_HHMMSS_acc0.XXXX.pth
-
-
-Each checkpoint includes:
-
-Model weights
-
-Best validation accuracy
-
-Training epoch
-
-Hyperparameters
-
-🧪 Supported Tasks
-
-The framework supports multiple RNA modification datasets by changing data loaders:
-
-m7G
-
-m1A
-
-m5C
-
-A-to-I
-
-Custom FASTA datasets
-
-You can switch datasets by modifying the read_fasta_* function calls in evaluation_method().
-
-📌 Reproducibility
-
-Fixed random seeds
-
-Deterministic CUDA settings enabled
-
-Same sequence centering and padding strategy across datasets
-
-📬 Contact
-
-If you have questions or want to collaborate, feel free to open an issue or contact the author.
+The dataset is split into training, validation, and test sets to ensure fair and reproducible evaluation.
