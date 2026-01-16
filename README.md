@@ -1,67 +1,86 @@
-## Overview
+🧬 FFTUNet-m7G - Interpretable Deep Learning for m7G Modification Prediction
 
-In this study, we constructed a new dataset that provides a richer and more reliable basis for subsequent model training and evaluation. In addition, we developed a new interpretable deep learning model, named **FFTUNet-m7G**, to achieve accurate and stable prediction of m7G modification sites.
+A novel interpretable deep learning model for accurate and stable prediction of m7G modification sites, combining frequency domain analysis and UNet architecture for multi-scale feature representation.
 
----
+📋 Table of Contents
+✨ Model Innovation Highlights
 
-## Main Contributions
+📊 Dataset Description
 
-The main contributions of this work are summarized as follows:
+⚙️ Environment Installation
 
-1. We constructed a more comprehensive and multidimensional dataset of m7G modification sites and loss-of-modification variants. Compared with previous studies, this dataset alleviates the problem of limited sample size and improves applicability under diverse biological conditions.
+🚀 Model Training and Usage
 
-2. We propose FFTUNet-m7G, which integrates Fast Fourier Transform on motif-level features. Through frequency-domain decomposition, the model captures variation information at different scales, enabling effective multi-scale feature representation and fusion.
+📈 Experimental Results
 
-3. A U-Net–based encoder–decoder architecture is introduced to extract hierarchical sequence features. This design helps suppress redundant information and noise, leading to more robust and stable prediction performance.
+📄 Citation
 
-4. To improve model interpretability and further investigate its prediction mechanism, structural-level and mutation-level analyses are conducted using AlphaFold-based structure modeling and in silico saturation mutagenesis (ISM), providing insights into both the model behavior and biological relevance.
+✨ Model Innovation Highlights
+In this study, we constructed a new dataset that provides a richer and more reliable basis for subsequent model training and evaluation. Additionally, we developed a new interpretable deep learning model, FFTUNet-m7G, to achieve accurate and stable prediction of m7G modification sites. The main contributions of this work are as follows:
 
-In addition, systematic comparative and ablation experiments demonstrate that FFTUNet-m7G consistently outperforms existing methods, and that each component contributes meaningfully to accurate prediction. The model is further evaluated on multiple RNA modification prediction tasks, indicating strong generalization ability and broad applicability.
+(1) More comprehensive m7G modification dataset: We built a more comprehensive and multidimensional dataset of m7G modifications and loss-of-modification variants. This helps relieve the problem of limited data in previous studies and greatly improves the applicability of the dataset under diverse biological conditions.
 
----
+(2) FFT-based multi-scale feature extraction: FFTUNet-m7G combines Fast Fourier Transform on motif-level features. By performing frequency-domain decomposition, the model captures variation information at different scales, which facilitates multi-scale representation and fusion of features.
 
-## Environment Requirements
+(3) UNet encoder-decoder architecture: We introduce a UNet architecture, which captures sequence features through an encoder–decoder framework and reduces the influence of redundant information and noise on the prediction results.
 
-The following environment is required to run FFTUNet-m7G:
+(4) Multi-level model interpretability analysis: To improve model interpretability and further investigate its prediction mechanism, we employed AlphaFold3 and in silico saturation mutagenesis (ISM) experiments to perform structural-level and mutation-level analyses of the model and the associated data.
 
-- Python ≥ 3.8  
-- PyTorch ≥ 1.10  
-- CUDA-enabled GPU is recommended
+📊 Dataset Description
+A precise and reliable dataset is the foundation and key starting point for conducting effective research. In this study, we constructed a new benchmark dataset for m7G modification based on RMVar 2.0.
 
-Required Python packages:
+Dataset Construction Strategy
+Data Source: Filtered m7G modification sites and loss-of-modification variants from RMVar 2.0
 
-```bash
-pip install torch numpy pandas scikit-learn tqdm termcolor tensorboard
-Usage
-Training
-Model training and evaluation are performed using the following script:
+Sequence Extraction: Extracted sequences centered on each site, extending 500 nt upstream and downstream (total length 1001 nt)
+
+Sample Classification:
+
+Reference Dataset: Central position is a G nucleotide (m7G modification sites)
+
+Alternative Dataset: Central position is a non-G nucleotide (variants leading to loss of m7G modification)
+
+All Dataset: Combined reference and alternative samples
+
+Dataset Statistics
+Dataset Type	Training Set	Validation Set	Test Set	Total
+Reference Dataset	7,018 pos + 7,018 neg	877 pos + 877 neg	879 pos + 879 neg	8,774 pos + 8,774 neg
+Alternative Dataset	21,346 pos + 21,346 neg	2,668 pos + 2,668 neg	2,669 pos + 2,669 neg	26,683 pos + 26,683 neg
+All Dataset	26,434 pos + 26,434 neg	3,304 pos + 3,304 neg	3,305 pos + 3,305 neg	33,043 pos + 33,043 neg
+Note: All sequences were clustered and deduplicated using CD-HIT with a sequence similarity threshold of 90%.
+
+⚙️ Environment Installation
+System Requirements
+Python 3.8+
+
+CUDA 11.8+ (for GPU acceleration)
+
+Quick Installation
+Clone the Repository
 
 bash
-复制代码
+git clone https://github.com/yourusername/FFTUNet-m7G.git
+cd FFTUNet-m7G
+Install Dependencies Using requirements.txt
+
+bash
+pip install -r requirements.txt
+Main Dependencies
+torch>=2.0.0
+
+numpy>=1.24.0
+
+pandas>=2.0.0
+
+scikit-learn>=1.3.0
+
+matplotlib>=3.7.0
+
+seaborn>=0.12.0
+
+biopython>=1.81
+
+🚀 Model Training and Usage
+Train the Model
+bash
 python train.py
-Before running, please ensure that:
-
-The correct GPU device is specified via CUDA_VISIBLE_DEVICES
-
-Dataset paths in train.py are properly configured
-
-Hyperparameters (e.g., learning rate, batch size, sequence length) are set in the params dictionary
-
-Dataset Description
-The dataset is provided in FASTA format and contains both positive (m7G-modified) and negative (loss-of-modification) samples.
-
-Each sequence header encodes the label information, for example:
-
-makefile
-复制代码
->chr19:34401574|1|train
-ATGCTAGCTAGCTAGCTAG...
-1 indicates a positive m7G modification site
-
-0 indicates a negative sample
-
-RNA sequences are automatically converted from U to T during preprocessing
-
-All sequences are centered and padded to a fixed length (default: 201 nt)
-
-The dataset is split into training, validation, and test sets to ensure fair and reproducible evaluation.
