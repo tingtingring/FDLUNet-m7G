@@ -77,6 +77,7 @@ A precise and reliable dataset is the foundation for effective research. In this
 ```bash
 git clone https://github.com/yourusername/FFTUNet-m7G.git
 cd FFTUNet-m7G
+```bash
 
 ## 🚀 Model Training and Usage
 
@@ -86,4 +87,5 @@ To train and evaluate the FFTUNet-m7G model, run the following command:
 
 ```bash
 python train.py
+```bash
 
