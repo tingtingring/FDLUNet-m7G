@@ -1,4 +1,4 @@
-# 🧬 FFTUNet-m7G  
+# 🧬 FDLUNet-m7G  
 **Interpretable Deep Learning for m7G Modification Prediction**
 
 A novel interpretable deep learning model for accurate and stable prediction of m7G modification sites, combining frequency-domain analysis and U-Net architecture for multi-scale feature representation.
@@ -72,15 +72,15 @@ A precise and reliable dataset is the foundation for effective research. In this
 #### Clone the repository
 
 ```bash
-git clone https://github.com/tingtingring/FFTUNet-m7G.git
-cd FFTUNet-m7G
+git clone https://github.com/tingtingring/FDLUNet-m7G.git
+cd FDLUNet-m7G
 ```
 
 ## 🚀 Model Training and Usage
 
 ### Training the Model
 
-To train and evaluate the FFTUNet-m7G model, run the following command:
+To train and evaluate the FDLUNet-m7G model, run the following command:
 
 ```bash
 python train.py
